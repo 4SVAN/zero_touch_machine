@@ -24,18 +24,18 @@ def loop(loop_t):
         x = gau_generator(10)
         sig = gen_rl_sig()
         
-        print(sig," at: ",i)
+        # print(sig," at: ",i)
         
         if sig == 'DO_STH': 
             result['spec']['replicas'] = rd.randint(1,10)
-            print(replica, " : ", result['spec'])
+            # print(replica, " : ", result['spec'])
             
-        if replica != result['spec']['replicas']:
-            with open('./nginx.yml', 'w', encoding='utf-8') as f:
-                yaml.dump(data=result,stream=f,allow_unicode=True)
-            replica = result['spec']['replicas']
+            if replica != result['spec']['replicas']:
+                with open('./nginx.yml', 'w', encoding='utf-8') as f:
+                    yaml.dump(data=result,stream=f,allow_unicode=True)
+                replica = result['spec']['replicas']
+            else: print("same value of replica compare to previous loop")
                 
         
         
-loop(5)
-
+loop(100)
