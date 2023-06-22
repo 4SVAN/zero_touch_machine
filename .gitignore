@@ -1,0 +1,8 @@
+# ignore .json file
+*.json
+# ignore pycache dir
+__pycache__/
+# ignore .vscode dir
+.vscode/
+# ignore model dir
+model/
