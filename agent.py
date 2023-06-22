@@ -12,15 +12,18 @@ MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
 LR = 0.001  # Loss Rate
 
+input_layer = 10
+output_layer = 9
+
 class RL_Agent:
 
-    def __init__(self):
+    def __init__(self, input, output):
         self.lt = 0 # loop time
         self.rn = 0 # randomness, higher -> more random
         self.dr = 0.9 # discount rate
         self.epsilon = 0.00001 # | Qnew - Qold | < ε, Qnew = Qmax
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
-        self.model = Linear_QNet(10, 256, 9)
+        self.model = Linear_QNet(input, 256, output) # lenght of the mse, 256,  length of action set
         self.trainer = QTrainer(self.model, lr=LR, dr=self.dr)
         
      
@@ -96,10 +99,7 @@ def gau_generator(sample):
     return gr  
 
 def loop(loop_t):
-    agent = RL_Agent()
-    reward = [0,0,0]
-    # read the initial state
-    
+    agent = RL_Agent(input_layer, output_layer)
     
     # initialize value of replica
     with open('./nginx.yml', 'r', encoding='utf-8') as f:
@@ -166,8 +166,8 @@ def loop(loop_t):
         #     reward[i] = (1/state_new[i]) - (1/state_old[i])
         
         # reward = 1 / (vector distance)
-        reward_new = np.linalg.norm(np.array(state_new))
-        reward_old = np.linalg.norm(np.array(state_old))
+        reward_new = 1 / np.linalg.norm(np.array(state_new))
+        reward_old = 1 / np.linalg.norm(np.array(state_old))
         print("state new: ", state_new)
         print("reward: ", reward_new)
         
